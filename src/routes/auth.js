@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 const { User } = require('../models')
 const { jwtVerify } = require('../middlewares')
 
@@ -10,7 +11,6 @@ router.post('/login', async function(req, res) {
   const user = User.findOne(
     {
       username: req.body.username,
-      password: req.body.password,
     },
     function(err, user) {
       if (err) {
@@ -18,11 +18,15 @@ router.post('/login', async function(req, res) {
       }
 
       if (!user) {
-        return res.status(404).json({ message: 'Not Found' })
+        return res.status(404).json({ message: 'User not found' })
+      }
+
+      if (!bcrypt.compareSync(req.body.password, user.password)) {
+        return res.status(401).json({ message: 'Bad Credentials' })
       }
 
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-        expiresIn: 30,
+        expiresIn: process.env.JWT_EXPIRES_IN,
       })
 
       res.header('Authorization', `Bearer ${token}`)
