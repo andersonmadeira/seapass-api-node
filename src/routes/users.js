@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const { User } = require('../models')
+const { jwtVerify } = require('../middlewares')
 
 const router = express.Router()
 
@@ -8,6 +9,8 @@ router.use(function timeLog(req, res, next) {
   console.log('Time: ', Date.now())
   next()
 })
+
+router.use(jwtVerify)
 
 router.get('/', async function(req, res) {
   User.find().then(
@@ -35,6 +38,8 @@ router.get('/:id', function(req, res) {
 router.post('/', function(req, res) {
   const user = new User({
     name: req.body.name,
+    username: req.body.username,
+    password: req.body.password,
     email: req.body.email,
   })
 
@@ -51,6 +56,8 @@ router.post('/', function(req, res) {
 router.patch('/:id', function(req, res) {
   const user = {
     name: req.body.name,
+    username: req.body.username,
+    password: req.body.password,
     email: req.body.email,
   }
 
