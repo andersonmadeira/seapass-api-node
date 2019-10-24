@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 
+const ObjectId = mongoose.Schema.Types.ObjectId
+
 const UserSchema = new mongoose.Schema({
   name: String,
   username: String,
@@ -27,11 +29,12 @@ const EntrySchema = new mongoose.Schema({
   },
   extras: [
     {
+      _id: false,
       name: String,
       value: String,
     },
   ],
-  author: Number,
+  author: ObjectId,
 })
 
 const Entry = mongoose.model('Entry', EntrySchema)

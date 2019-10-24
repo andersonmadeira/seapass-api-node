@@ -1,14 +1,9 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const { User } = require('../models')
+const { User, Entry } = require('../models')
 const { jwtVerify } = require('../middlewares')
 
 const router = express.Router()
-
-router.use(function timeLog(req, res, next) {
-  console.log('Time: ', Date.now())
-  next()
-})
 
 router.use(jwtVerify)
 
@@ -45,7 +40,7 @@ router.post('/', function(req, res) {
 
   user.save().then(
     user => {
-      res.send(user)
+      res.json(user)
     },
     error => {
       res.status(500).send(error)
@@ -76,7 +71,17 @@ router.delete('/:id', function(req, res) {
       res.status(500).send(err)
     }
 
-    res.send(result)
+    res.json(result)
+  })
+})
+
+router.get('/:id/entries', function(req, res) {
+  Entry.find({ author: req.params.id }, function(err, entries) {
+    if (err) {
+      res.status(500).send(err)
+    }
+
+    res.json(entries)
   })
 })
 
