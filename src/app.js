@@ -8,6 +8,7 @@ dotenv.config()
 
 const authRouter = require('./routes/auth')
 const usersRouter = require('./routes/users')
+const categoriesRouter = require('./routes/categories')
 const entriesRouter = require('./routes/entries')
 
 mongoose.connect('mongodb://localhost:27017/seapass', {
@@ -25,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/users', usersRouter)
 app.use('/auth', authRouter)
 app.use('/entries', entriesRouter)
+app.use('/categories', categoriesRouter)
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`)

@@ -1,6 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const { User, Category, Entry } = require('../models')
+const { Category, Entry } = require('../models')
 const { jwtVerify } = require('../middlewares')
 
 const router = express.Router()
@@ -8,9 +8,9 @@ const router = express.Router()
 router.use(jwtVerify)
 
 router.get('/', async function(req, res) {
-  User.find().then(
-    users => {
-      res.json(users)
+  Category.find().then(
+    categories => {
+      res.json(categories)
     },
     error => {
       res.json({ message: error })
@@ -21,26 +21,25 @@ router.get('/', async function(req, res) {
 router.get('/:id', function(req, res) {
   const { id } = req.params
 
-  User.findById(id, function(err, user) {
+  Category.findById(id, function(err, category) {
     if (err) {
       res.status(500).send(err)
     }
 
-    res.json(user)
+    res.json(category)
   })
 })
 
 router.post('/', function(req, res) {
-  const user = new User({
+  const category = new Category({
     name: req.body.name,
-    username: req.body.username,
-    password: req.body.password,
-    email: req.body.email,
+    description: req.body.description,
+    author: req.user._id,
   })
 
-  user.save().then(
-    user => {
-      res.json(user)
+  category.save().then(
+    category => {
+      res.send(category)
     },
     error => {
       res.status(500).send(error)
@@ -49,14 +48,12 @@ router.post('/', function(req, res) {
 })
 
 router.patch('/:id', function(req, res) {
-  const user = {
+  const category = {
     name: req.body.name,
-    username: req.body.username,
-    password: req.body.password,
-    email: req.body.email,
+    description: req.body.description,
   }
 
-  User.updateOne({ _id: req.params.id }, user, function(err, result) {
+  Category.updateOne({ _id: req.params.id }, category, function(err, result) {
     if (err) {
       res.status(500).send(err)
     }
@@ -66,32 +63,22 @@ router.patch('/:id', function(req, res) {
 })
 
 router.delete('/:id', function(req, res) {
-  User.deleteOne({ _id: req.params.id }, function(err, result) {
+  Category.deleteOne({ _id: req.params.id }, function(err, result) {
     if (err) {
       res.status(500).send(err)
     }
 
-    res.json(result)
+    res.send(result)
   })
 })
 
 router.get('/:id/entries', function(req, res) {
-  Entry.find({ author: req.params.id }, function(err, entries) {
+  Entry.find({ category: req.params.id }, function(err, entries) {
     if (err) {
       res.status(500).send(err)
     }
 
     res.json(entries)
-  })
-})
-
-router.get('/:id/categories', function(req, res) {
-  Category.find({ author: req.params.id }, function(err, categories) {
-    if (err) {
-      res.status(500).send(err)
-    }
-
-    res.json(categories)
   })
 })
 

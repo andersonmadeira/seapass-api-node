@@ -19,9 +19,19 @@ UserSchema.pre('save', function(next) {
 
 const User = mongoose.model('User', UserSchema)
 
+const CategorySchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  author: ObjectId,
+})
+
+const Category = mongoose.model('Category', CategorySchema)
+
 const EntrySchema = new mongoose.Schema({
   name: String,
   description: String,
+  author: ObjectId,
+  category: ObjectId,
   credentials: {
     hostname: String,
     username: String,
@@ -34,10 +44,10 @@ const EntrySchema = new mongoose.Schema({
       value: String,
     },
   ],
-  author: ObjectId,
 })
 
 const Entry = mongoose.model('Entry', EntrySchema)
 
 module.exports.User = User
+module.exports.Category = Category
 module.exports.Entry = Entry

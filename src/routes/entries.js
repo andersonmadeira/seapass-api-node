@@ -38,6 +38,7 @@ router.post('/', function(req, res) {
   const entry = new Entry({
     name: req.body.name,
     description: req.body.description,
+    category: req.body.category,
     credentials: {
       hostname: req.body.credentials.hostname,
       username: req.body.credentials.username,
@@ -65,13 +66,13 @@ router.patch('/:id', function(req, res) {
   const entry = {
     name: req.body.name,
     description: req.body.description,
+    category: req.body.category,
     credentials: {
       hostname: req.body.credentials.hostname,
       username: req.body.credentials.username,
       password: req.body.credentials.password,
     },
     extras: extras,
-    author: req.user._id,
   }
 
   Entry.updateOne({ _id: req.params.id }, entry, function(err, result) {
