@@ -25,8 +25,8 @@ router.post('/login', async function(req, res) {
         return res.status(401).json({ message: 'Bad Credentials' })
       }
 
-      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: Number(process.env.JWT_EXPIRES_IN),
       })
 
       res.header('Authorization', `Bearer ${token}`)
