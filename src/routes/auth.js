@@ -31,13 +31,13 @@ router.post('/login', async function(req, res) {
 
       res.header('Authorization', `Bearer ${token}`)
 
-      return res.json({ user })
+      return res.json({ user: user.serialize() })
     }
   )
 })
 
 router.get('/user', jwtVerify, async function(req, res) {
-  res.json(req.user)
+  res.json({ user: req.user.serialize() })
 })
 
 module.exports = router

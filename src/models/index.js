@@ -17,6 +17,16 @@ UserSchema.pre('save', function(next) {
   next()
 })
 
+UserSchema.methods.serialize = function() {
+  return {
+    _id: this._id,
+    username: this.username,
+    email: this.email,
+    name: this.name,
+    __v: this.__v,
+  }
+}
+
 const User = mongoose.model('User', UserSchema)
 
 const CategorySchema = new mongoose.Schema({

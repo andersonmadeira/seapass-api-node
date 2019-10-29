@@ -17,16 +17,16 @@ mongoose.connect('mongodb://localhost:27017/seapass', {
 })
 
 const app = express()
-const port = 3000
+const port = 3001
 
 app.use(helmet())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use('/users', usersRouter)
-app.use('/auth', authRouter)
-app.use('/entries', entriesRouter)
-app.use('/categories', categoriesRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/entries', entriesRouter)
+app.use('/api/categories', categoriesRouter)
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`)
