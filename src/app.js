@@ -3,8 +3,9 @@ const helmet = require('helmet')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv-safe')
-
 dotenv.config()
+
+const { cors } = require('./middlewares')
 
 const authRouter = require('./routes/auth')
 const usersRouter = require('./routes/users')
@@ -22,6 +23,7 @@ const port = 3001
 app.use(helmet())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cors)
 
 app.use('/api/users', usersRouter)
 app.use('/api/auth', authRouter)
