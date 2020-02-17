@@ -12,13 +12,13 @@ const usersRouter = require('./routes/users')
 const categoriesRouter = require('./routes/categories')
 const entriesRouter = require('./routes/entries')
 
-mongoose.connect('mongodb://localhost:27017/seapass', {
+mongoose.connect(process.env.DB_CONNECTION_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 
 const app = express()
-const port = 3001
+const port = process.env.PORT || 3001
 
 app.use(helmet())
 app.use(express.json())
